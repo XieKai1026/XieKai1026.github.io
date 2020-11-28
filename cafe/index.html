@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tuxedo Cat Coffee</title>
+    <link type="text/css" rel="stylesheet" href="cafe.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+        $("document").ready(function(){
+            
+        
+            var imgSrcArr=new Array();            
+            $("#menu li a img").each(function(i,v){
+                imgSrcArr[i]=v.id                
+            });
+            //console.log(imgSrcArr);            
+            var imgWrap = [];
+            function preloadImg(arr) {
+                for(var i =0; i< arr.length ;i++) {
+                    imgWrap[i] = new Image();
+                    imgWrap[i].src = arr[i];
+                }
+            }            
+            preloadImg(imgSrcArr);
+            
+            
+            $("#menu li").hover(function(){
+                var src1=$(this).find("img").attr("src");
+                var src2=$(this).find("img").attr("id");
+                $(this).find("img").attr('id',src1);
+                $(this).find("img").attr('src',src2);
+            },function(){
+                var src1=$(this).find("img").attr("src");
+                var src2=$(this).find("img").attr("id");
+                $(this).find("img").attr('id',src1);
+                $(this).find("img").attr('src',src2);
+            });
+            
+            
+            $("#menu a").click(function (){
+                var total=$("#total").text();
+                total=total.replace(/[^\d.]/g,"");
+                var name=$(this).attr("data-name");
+                var price=$(this).attr("data-price");
+                //add order list
+                var items='<option>$'+price+' - '+name+'</option>';
+                $("#order").prepend(items);
+                //total
+                total=total*1+price*1;
+                total = total.toFixed(2);
+                $("#total").text("Total：$"+total);
+            })
+            
+            
+            
+            $("#place_order").click(function (){
+                var total=$("#total").text();
+                total=total.replace(/[^\d.]/g,"");
+                if(total){
+                    window.location.href = "checkout.html"; 
+                }else{
+                    alert("Click an item to add it to your order");
+                }
+            })
+            
+            
+            $("#clear_order").click(function (){
+                $("#order,#total").empty();
+            })            
+            
+        })
+    </script>
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="Tuxedo Cat Coffee"/>
+    </header>
+    <main>
+        <form id="order_form" name="order_form" action="checkout.html" method="get">
+            <section id="menu">
+            	<h2>Menu</h2>
+            	<p>Click an item to add it to your order.</p>
+            	<ul>
+            		<li>
+                        <a href="#" data-name="Espresso" data-price="1.95" >
+                        <img id="images/espresso_info.jpg" src="images/espresso.jpg" alt="espresso"/>
+                        </a>
+                    </li>
+            		<li>
+                        <a href="#" data-name="Latte" data-price="2.95">
+                            <img id="images/latte_info.jpg" src="images/latte.jpg" alt="latte"/>
+                        </a>
+                    </li>
+            		<li>
+                        <a href="#" data-name="Cappuccino" data-price="3.45">
+                            <img id="images/cappuccino_info.jpg" src="images/cappuccino.jpg" alt="cappuccino"/>
+                        </a>
+                    </li>
+            		<li>
+                        <a href="#" alt="coffee" data-name="Drip Coffee" data-price="1.75">
+                            <img id="images/coffee_info.jpg" src="images/coffee.jpg"/>
+                        </a>
+                    </li>
+            		<li>
+                        <a href="#" data-name="Biscotti" data-price="1.95">
+                            <img id="images/biscotti_info.jpg" src="images/biscotti.jpg" alt="biscotti"/>
+                        </a>
+                    </li>
+            		<li>
+                        <a href="#" data-name="Scone" data-price="2.95">
+                            <img id="images/scone_info.jpg" src="images/scone.jpg" alt="scone"/>
+                        </a>
+                    </li>
+            	</ul>
+            </section>
+
+            <section>
+            	<h2>Your Order</h2>
+            	<section>
+            		<select id="order" name="order" size="6">
+            		</select>
+            		<p id="total">&nbsp;</p>            		
+           		</section>
+            	<section id="buttons">
+           			<input type="button" name="place_order" id="place_order" value="Place Order">
+           			<input type="button" name="clear_order" id="clear_order" value="Clear Order">				            		
+            	</section>
+            </section>   
+
+
+
+        </form>
+    </main> 
+</body>
+</html>
